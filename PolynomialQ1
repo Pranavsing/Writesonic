@@ -1,0 +1,152 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void f(string s,map<int,int>&mp,char ch){
+    int n=s.size();
+    string num="";
+    int i=0;
+    while(s[i]!=ch){
+        num+=s[i];
+        i++;
+    }
+    int pow=0;
+    int coeff=stoi(num);
+    i+=2;
+    string p="";
+    while(i<n){
+        p+=s[i];
+        i++;
+    }
+    if(p.size()!=0){
+        pow=stoi(p);
+    }
+    mp[pow]=coeff;
+
+}
+
+int main(){
+    string s;
+    cin>>s;
+    map<int,int>mp1;
+    map<int,int>mp2;
+    string s1="",s2="";
+    int i=1;
+    char ch=']';
+    while(s[i]!=')'){
+        if(s[i]=='^'){
+            ch=s[i-1];
+        }
+        s1+=s[i];
+        i++;
+    }
+    i+=2;
+    while(s[i]!=')'){
+        s2+=s[i];
+        i++;
+    }
+    // cout<<s1<<" "<<s2<<endl;
+    vector<string>str1,str2;
+    string temp="";
+    for(int i=0;i<s1.size();i++){
+        if(s1[i]=='+'){
+            str1.push_back(temp);
+            temp="";
+        }
+        else if(s1[i]=='-'){
+            str1.push_back(temp);
+            temp='-';
+        }
+        else{
+            temp+=s1[i];
+        }
+    }
+    str1.push_back(temp);
+    temp="";
+    for(int i=0;i<s2.size();i++){
+        if(s2[i]=='+'){
+            str2.push_back(temp);
+            temp="";
+        }
+        else if(s2[i]=='-'){
+            str2.push_back(temp);
+            temp='-';
+        }
+        else{
+            temp+=s2[i];
+        }
+    }
+    str2.push_back(temp);
+    // for(auto it:str1){
+    //     cout<<it<<" ";
+    // }
+    // cout<<endl;
+    // for(auto it:str2){
+    //     cout<<it<<" ";
+    // }
+    // cout<<endl;
+    // cout<<"OK"<<endl;
+    for(auto it:str1){
+        f(it,mp1,ch);
+    }
+    for(auto it:str2){
+        f(it,mp2,ch);
+    }
+    // for(auto it:mp1){
+    //     cout<<it.first<<" "<<it.second<<endl;
+    // }
+    // for(auto it:mp2){
+    //     cout<<it.first<<" "<<it.second<<endl;
+    // }
+    map<int,int,greater<int>>mp;
+    for(auto it1:mp1){
+        int sum=0;
+        int pow=0;
+        for(auto it2:mp2){
+            sum=it1.second*it2.second;
+            pow=it1.first+it2.first;
+            mp[pow]+=sum;
+        }
+    }
+    // for(auto it:mp){
+    //     cout<<it.first<<" "<<it.second<<endl;
+    // }
+    string ans="";
+    i=0;
+    for(auto it:mp){
+        if(it.first==0){
+            if(it.second>0){
+                if(i==0){
+                    ans+=to_string(it.second);
+                }
+                else{
+                    ans+='+'+to_string(it.second);
+                }
+            }
+            else if(it.second<0){
+                    ans+=to_string(it.second);
+            }
+            else{
+                continue;
+            }
+        }
+        else{
+            if(it.second>0){
+                if(i==0){
+                    ans+=to_string(it.second)+ch+'^'+to_string(it.first);
+                }
+                else{
+                    ans+='+'+to_string(it.second)+ch+'^'+to_string(it.first);
+                }
+            }
+            else if(it.second<0){
+                    ans+=to_string(it.second)+ch+'^'+to_string(it.first);
+            }
+            else{
+                continue;
+            }
+        }
+        i++;
+    }
+    cout<<ans<<endl;
+    return 0;
+}
