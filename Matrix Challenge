@@ -23,9 +23,9 @@ int f(vector<vector<int>>&grid,vector<vector<int>>&ans){
     int check=1;
     for(int i=0;i<n;i++){
         for(int j=0;j<n;j++){
-            if(grid[i][j]==1){
+            if(i!=j && grid[i][j]==1){
                 for(int k=0;k<n;k++){
-                    if(grid[j][k]==1 && grid[i][k]==0){
+                    if(j!=k && k!=i && grid[j][k]==1 && grid[i][k]==0){
                         ans.push_back({i,k});
                         check=false;
                         grid[i][k]=1;
