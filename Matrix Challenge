@@ -1,0 +1,79 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+vector<vector<int>> mat(vector<string>&s){
+    int n=s.size();
+    vector<vector<int>>grid(n,vector<int>(n));
+    for(int i=0;i<n;i++){
+        string temp=s[i].substr(1,s[i].size()-2);
+        // cout<<temp<<endl;
+        stringstream ss(temp);
+        int j=0;
+        string t;
+        while(getline(ss,t,',')){
+            grid[i][j]=stoi(t);
+            j++;
+        }
+    }
+    return grid;
+}
+
+int f(vector<vector<int>>&grid,vector<vector<int>>&ans){
+    int n=grid.size();
+    int check=1;
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            if(grid[i][j]==1){
+                for(int k=0;k<n;k++){
+                    if(grid[j][k]==1 && grid[i][k]==0){
+                        ans.push_back({i,k});
+                        check=false;
+                        grid[i][k]=1;
+                    }
+                }
+            }
+        }
+    }
+    return check;
+}
+
+bool static cmp(vector<int>&a,vector<int>&b){
+    if(a[0]!=b[0]){
+        return a[0]<b[0];
+    }
+    return a[1]<b[1];
+}
+
+int main(){
+    vector<string>s;
+    int n;
+    cin>>n;
+    for(int i=0;i<n;i++){
+        string temp;
+        cin>>temp;
+        s.push_back(temp);
+    }
+    vector<vector<int>> grid=mat(s);
+    vector<vector<int>> st;
+    int a=f(grid,st);
+    sort(st.begin(),st.end(),cmp);
+    string ans="";
+    if(a==1){
+        ans="transitive";
+    }
+    else{
+        int i=0;
+        for(auto it:st){
+            if(i==0){
+                ans+='('+to_string(it[0])+','+to_string(it[1])+')';
+            }
+            else{
+                ans+='-';
+                ans+='('+to_string(it[0])+','+to_string(it[1])+')';
+            }
+            i++;
+        }
+    }
+    cout<<ans<<endl;
+    return 0;
+}
